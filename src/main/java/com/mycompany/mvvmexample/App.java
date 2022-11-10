@@ -14,7 +14,7 @@ import javafx.stage.Stage;
  * JavaFX App
  */
 public class App extends Application {
-   public static Firestore fstore;
+    public static Firestore fstore;
     private final FirestoreContext contxtFirebase = new FirestoreContext();
 	@Override
 	public void start(Stage primaryStage) throws Exception {
