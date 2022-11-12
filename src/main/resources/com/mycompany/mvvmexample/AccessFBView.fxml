@@ -20,7 +20,7 @@
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="25.0">
                <children>
                   <Button fx:id="readButton" mnemonicParsing="false" onAction="#handle_readRecords" text="Read" textAlignment="CENTER" />
-                  <Button fx:id="writeButton" mnemonicParsing="false" onAction="#handle_addRecord" text="Write" textAlignment="CENTER" />
+                  <Button fx:id="writeButton" mnemonicParsing="false" onAction="#handle_writeRecord" text="Write" textAlignment="CENTER" />
                   <Button fx:id="updateButton" mnemonicParsing="false" onAction="#handle_updateRecord" text="Update" textAlignment="CENTER" />
                   <Button fx:id="removeButton" mnemonicParsing="false" onAction="#handle_removeRecord" text="Remove" textAlignment="CENTER" />
                </children>

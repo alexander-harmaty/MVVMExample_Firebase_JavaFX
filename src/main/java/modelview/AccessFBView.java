@@ -98,12 +98,9 @@ public class AccessFBView implements Initializable {
     }
 
     @FXML
-    private void handle_addRecord(ActionEvent event) {
+    private void handle_writeRecord(ActionEvent event) throws InterruptedException, ExecutionException {
         
-        addRecord();
-        nameField.clear();
-        majorField.clear();
-        ageField.clear();
+        writeRecord();
         handle_readRecords(event);
         
     }
@@ -111,6 +108,9 @@ public class AccessFBView implements Initializable {
     @FXML
     private void handle_readRecords(ActionEvent event) {
         
+        nameField.clear();
+        majorField.clear();
+        ageField.clear();
         outputField.clear();
         outputTable.getItems().clear();
         readRecords();
@@ -133,16 +133,20 @@ public class AccessFBView implements Initializable {
         
     }
     
-    public void addRecord() {
+    public void writeRecord() throws InterruptedException, ExecutionException {
 
-        DocumentReference docRef = App.fstore.collection("References").document(UUID.randomUUID().toString());
-        // Add document data  with id "alovelace" using a hashmap
-        Map<String, Object> data = new HashMap<>();
-        data.put("Name", nameField.getText());
-        data.put("Major", majorField.getText());
-        data.put("Age", Integer.parseInt(ageField.getText()));
-        //asynchronously write data
-        ApiFuture<WriteResult> result = docRef.set(data);
+        if( !"".equals(nameField.getText()) || !"".equals(majorField.getText()) || !"".equals(ageField.getText()) ) {
+            DocumentReference docRef = App.fstore.collection("References").document(UUID.randomUUID().toString());
+            // Add document data  with id "alovelace" using a hashmap
+            Map<String, Object> data = new HashMap<>();
+            data.put("Name", nameField.getText());
+            data.put("Major", majorField.getText());
+            data.put("Age", Integer.parseInt(ageField.getText()));
+            //asynchronously write data
+            ApiFuture<WriteResult> result = docRef.set(data);
+            // ...
+            System.out.println("Update time : " + result.get().getUpdateTime());
+        }
         
     }
     
@@ -160,7 +164,7 @@ public class AccessFBView implements Initializable {
         {
             documents = future.get().getDocuments();
             
-            if(documents.size()>0)
+            if(!documents.isEmpty())
             {
                 System.out.println("Outing....");
                 
@@ -184,10 +188,9 @@ public class AccessFBView implements Initializable {
                             document.getData().get("Major")+ " , Age: "+
                             document.getData().get("Age")+ " \n ");
                     
-                    System.out.println(document.getId() + " => " + document.getData().get("Name"));
-                    
                     ////////////////////////////////////////////////////////////
                     
+                    System.out.println(document.getId() + " => " + document.getData().get("Name"));
                     outputTable.setItems(listOfUsers);
                 }
             }
@@ -199,47 +202,34 @@ public class AccessFBView implements Initializable {
             key=true;
 
         }
-        catch (InterruptedException | ExecutionException ex) 
-        {
-             ex.printStackTrace();
-        }
+        catch (InterruptedException | ExecutionException ex) {}
         
         return key;
     }
     
     public void updateRecord() throws InterruptedException, ExecutionException {
-        // Create an initial document to update
-        DocumentReference frankDocRef = App.fstore.collection("References").document("currentID");
-        Map<String, Object> initialData = new HashMap<>();
-        initialData.put("name", "Frank");
-        initialData.put("age", 12);
-
-        Map<String, Object> favorites = new HashMap<>();
-        favorites.put("food", "Pizza");
-        favorites.put("color", "Blue");
-        favorites.put("subject", "Recess");
-        initialData.put("favorites", favorites);
-
-        ApiFuture<WriteResult> initialResult = frankDocRef.set(initialData);
-        // Confirm that data has been successfully saved by blocking on the operation
-        initialResult.get();
-
-        // Update age and favorite color
-        Map<String, Object> updates = new HashMap<>();
-        updates.put("age", 13);
-        updates.put("favorites.color", "Red");
-
-        // Async update document
-        ApiFuture<WriteResult> writeResult = frankDocRef.update(updates);
-        // ...
-        System.out.println("Update time : " + writeResult.get().getUpdateTime());
-
+        
+        if( !"".equals(nameField.getText()) || !"".equals(majorField.getText()) || !"".equals(ageField.getText()) ) {
+            DocumentReference docRef = App.fstore.collection("References").document(currentID);
+            // Update 
+            Map<String, Object> updates = new HashMap<>();
+            updates.put("Name", nameField.getText());
+            updates.put("Major", majorField.getText());
+            updates.put("Age", Integer.parseInt(ageField.getText()));
+            // Async update document
+            ApiFuture<WriteResult> writeResult = docRef.update(updates);
+            // ...
+            System.out.println("Update time : " + writeResult.get().getUpdateTime());
+        }
+        
     }
     
     public void removeRecord() throws InterruptedException, ExecutionException {
+        
         //asynchronously delete a document
         ApiFuture<WriteResult> writeResult = App.fstore.collection("References").document(currentID).delete();
         System.out.println("Update time : " + writeResult.get().getUpdateTime()); 
+        
     }
 
 }
