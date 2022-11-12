@@ -56,6 +56,9 @@ public class AccessFBView implements Initializable {
 
     @FXML
     private TableColumn<Person, String> column_name;
+    
+    @FXML
+    private TableColumn<Person, String> column_ID;
            
     private boolean key;
     
@@ -72,11 +75,12 @@ public class AccessFBView implements Initializable {
         AccessDataViewModel accessDataViewModel = new AccessDataViewModel();
         nameField.textProperty().bindBidirectional(accessDataViewModel.userNameProperty());
         majorField.textProperty().bindBidirectional(accessDataViewModel.userMajorProperty());
-        writeButton.disableProperty().bind(accessDataViewModel.isWritePossibleProperty().not());
+        //writeButton.disableProperty().bind(accessDataViewModel.isWritePossibleProperty().not());
         
         column_name.setCellValueFactory(new PropertyValueFactory<>("Name"));
         column_major.setCellValueFactory(new PropertyValueFactory<>("Major"));
         column_age.setCellValueFactory(new PropertyValueFactory<>("Age"));
+        column_ID.setCellValueFactory(new PropertyValueFactory<>("ID"));
         
         outputTable.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
@@ -113,7 +117,7 @@ public class AccessFBView implements Initializable {
     }
     
     @FXML
-    private void removeRecord(ActionEvent event) {
+    private void removeRecord(ActionEvent event) throws InterruptedException, ExecutionException {
         remove();
         
         readRecord(event);
@@ -149,12 +153,14 @@ public class AccessFBView implements Initializable {
             {
                 System.out.println("Outing....");
                 
+                
                 for (QueryDocumentSnapshot document : documents) 
                 {
                     person  = new Person(
                                 String.valueOf(document.getData().get("Name")), 
                                 document.getData().get("Major").toString(),
-                                Integer.parseInt(document.getData().get("Age").toString())
+                                Integer.parseInt(document.getData().get("Age").toString()),
+                                String.valueOf(document.getId())
                             );
                     
                     listOfUsers.add(person);
@@ -191,11 +197,16 @@ public class AccessFBView implements Initializable {
     }
     
     public void update() {
+        /**
+         * CODE TO UPDATE FIRESTORE
+         */
         
     }
     
-    public void remove() {
-        
+    public void remove() throws InterruptedException, ExecutionException {
+        //asynchronously delete a document
+        ApiFuture<WriteResult> writeResult = App.fstore.collection("References").document("19Yg4zyGuKxEcbM56TJQ").delete();
+        System.out.println("Update time : " + writeResult.get().getUpdateTime()); 
     }
 
 }

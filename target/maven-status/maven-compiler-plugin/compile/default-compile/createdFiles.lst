@@ -1,4 +1,5 @@
 models\Person.class
+modelview\AccessFBView$1.class
 viewmodel\AccessDataViewModel.class
 com\mycompany\mvvmexample\App.class
 com\mycompany\mvvmexample\FirestoreContext.class
