@@ -22,6 +22,7 @@ import java.util.concurrent.ExecutionException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -30,6 +31,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import models.Person;
 
 public class AccessFBView implements Initializable {
@@ -44,7 +46,7 @@ public class AccessFBView implements Initializable {
     private TextArea outputField;
     
     @FXML
-    private TableView outputTable = new TableView();
+    private TableView<Person> outputTable = new TableView();
     
     @FXML
     private TableColumn<Person, Integer> column_age;
@@ -75,6 +77,15 @@ public class AccessFBView implements Initializable {
         column_name.setCellValueFactory(new PropertyValueFactory<>("Name"));
         column_major.setCellValueFactory(new PropertyValueFactory<>("Major"));
         column_age.setCellValueFactory(new PropertyValueFactory<>("Age"));
+        
+        outputTable.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                nameField.setText(outputTable.getSelectionModel().getSelectedItem().getName());
+                majorField.setText(outputTable.getSelectionModel().getSelectedItem().getMajor()); 
+                ageField.setText(Integer.toString(outputTable.getSelectionModel().getSelectedItem().getAge()));
+            }
+        });
     }
 
     @FXML
@@ -83,12 +94,29 @@ public class AccessFBView implements Initializable {
         nameField.clear();
         majorField.clear();
         ageField.clear();
+        
+        readRecord(event);
     }
 
     @FXML
     private void readRecord(ActionEvent event) {
         outputField.clear();
+        outputTable.getItems().clear();
         readFirebase();
+    }
+    
+    @FXML
+    private void updateRecord(ActionEvent event) {
+        update();
+        
+        readRecord(event);
+    }
+    
+    @FXML
+    private void removeRecord(ActionEvent event) {
+        remove();
+        
+        readRecord(event);
     }
     
     public void addData() {
@@ -103,8 +131,8 @@ public class AccessFBView implements Initializable {
         ApiFuture<WriteResult> result = docRef.set(data);
     }
     
-    public boolean readFirebase()
-    {
+    public boolean readFirebase() {
+        
         key = false;
 
         //asynchronously retrieve all documents
@@ -160,6 +188,14 @@ public class AccessFBView implements Initializable {
         }
         
         return key;
+    }
+    
+    public void update() {
+        
+    }
+    
+    public void remove() {
+        
     }
 
 }
