@@ -103,13 +103,15 @@ public class AccessFBView {
                 
                 for (QueryDocumentSnapshot document : documents) 
                 {
-                    outputField.setText(outputField.getText()+ document.getData().get("Name")+ " , Major: "+
+                    outputField.setText(outputField.getText()+ 
+                            document.getData().get("Name")+ " , Major: "+
                             document.getData().get("Major")+ " , Age: "+
                             document.getData().get("Age")+ " \n ");
                     
                     System.out.println(document.getId() + " => " + document.getData().get("Name"));
                     
-                    person  = new Person(String.valueOf(document.getData().get("Name")), 
+                    person  = new Person(String.valueOf(
+                            document.getData().get("Name")), 
                             document.getData().get("Major").toString(),
                             Integer.parseInt(document.getData().get("Age").toString()));
                     
@@ -124,7 +126,6 @@ public class AccessFBView {
             key=true;
 
         }
-        
         catch (InterruptedException | ExecutionException ex) 
         {
              ex.printStackTrace();
