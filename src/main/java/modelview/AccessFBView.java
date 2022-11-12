@@ -30,22 +30,21 @@ import models.Person;
 
 public class AccessFBView {
 
-
     @FXML
-    private TextField nameField;
+    private TextField nameField, majorField, ageField;
+    
     @FXML
-    private TextField majorField;
-    @FXML
-    private TextField ageField;
-    @FXML
-    private Button writeButton;
-    @FXML
-    private Button readButton;
+    private Button writeButton, readButton;
+    
     @FXML
     private TextArea outputField;
-     private boolean key;
+    
+    private boolean key;
+    
     private ObservableList<Person> listOfUsers = FXCollections.observableArrayList();
+    
     private Person person;
+    
     public ObservableList<Person> getListOfUsers() {
         return listOfUsers;
     }
@@ -66,7 +65,7 @@ public class AccessFBView {
         ageField.clear();
     }
 
-        @FXML
+    @FXML
     private void readRecord(ActionEvent event) {
         outputField.clear();
         readFirebase();
@@ -84,29 +83,36 @@ public class AccessFBView {
         ApiFuture<WriteResult> result = docRef.set(data);
     }
     
-        public boolean readFirebase()
-        {
-            key = false;
+    public boolean readFirebase()
+    {
+        key = false;
 
         //asynchronously retrieve all documents
         ApiFuture<QuerySnapshot> future =  App.fstore.collection("References").get();
+        
         // future.get() blocks on response
         List<QueryDocumentSnapshot> documents;
+        
         try 
         {
             documents = future.get().getDocuments();
+            
             if(documents.size()>0)
             {
                 System.out.println("Outing....");
+                
                 for (QueryDocumentSnapshot document : documents) 
                 {
                     outputField.setText(outputField.getText()+ document.getData().get("Name")+ " , Major: "+
                             document.getData().get("Major")+ " , Age: "+
                             document.getData().get("Age")+ " \n ");
+                    
                     System.out.println(document.getId() + " => " + document.getData().get("Name"));
+                    
                     person  = new Person(String.valueOf(document.getData().get("Name")), 
                             document.getData().get("Major").toString(),
                             Integer.parseInt(document.getData().get("Age").toString()));
+                    
                     listOfUsers.add(person);
                 }
             }
@@ -114,13 +120,17 @@ public class AccessFBView {
             {
                System.out.println("No data"); 
             }
-            key=true;
             
+            key=true;
+
         }
+        
         catch (InterruptedException | ExecutionException ex) 
         {
              ex.printStackTrace();
         }
+        
         return key;
     }
+    
 }
