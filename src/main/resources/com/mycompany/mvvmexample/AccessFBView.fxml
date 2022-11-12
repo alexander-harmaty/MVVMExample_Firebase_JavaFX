@@ -19,10 +19,10 @@
             <TextField fx:id="ageField" promptText="Age" />
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="25.0">
                <children>
-                  <Button fx:id="readButton" mnemonicParsing="false" onAction="#readRecord" text="Read" textAlignment="CENTER" />
-                  <Button fx:id="writeButton" mnemonicParsing="false" onAction="#addRecord" text="Write" textAlignment="CENTER" />
-                  <Button fx:id="updateButton" mnemonicParsing="false" onAction="#updateRecord" text="Update" textAlignment="CENTER" />
-                  <Button fx:id="removeButton" mnemonicParsing="false" onAction="#removeRecord" text="Remove" textAlignment="CENTER" />
+                  <Button fx:id="readButton" mnemonicParsing="false" onAction="#handle_readRecords" text="Read" textAlignment="CENTER" />
+                  <Button fx:id="writeButton" mnemonicParsing="false" onAction="#handle_addRecord" text="Write" textAlignment="CENTER" />
+                  <Button fx:id="updateButton" mnemonicParsing="false" onAction="#handle_updateRecord" text="Update" textAlignment="CENTER" />
+                  <Button fx:id="removeButton" mnemonicParsing="false" onAction="#handle_removeRecord" text="Remove" textAlignment="CENTER" />
                </children>
             </HBox>
             <TextArea fx:id="outputField" minHeight="200.0" />
@@ -31,7 +31,7 @@
                   <TableColumn fx:id="column_name" prefWidth="75.0" text="Name" />
                   <TableColumn fx:id="column_major" prefWidth="75.0" text="Major" />
                   <TableColumn fx:id="column_age" prefWidth="75.0" text="Age" />
-                  <TableColumn fx:id="column_ID" prefWidth="75.0" text="ID" />
+                  <TableColumn fx:id="column_ID" prefWidth="75.0" text="ID" visible="false" />
                </columns>
             </TableView>
          </children>
