@@ -103,17 +103,19 @@ public class AccessFBView {
                 
                 for (QueryDocumentSnapshot document : documents) 
                 {
-                    outputField.setText(outputField.getText()+ 
+                    outputField.setText(
+                            outputField.getText()+ 
                             document.getData().get("Name")+ " , Major: "+
                             document.getData().get("Major")+ " , Age: "+
                             document.getData().get("Age")+ " \n ");
                     
                     System.out.println(document.getId() + " => " + document.getData().get("Name"));
                     
-                    person  = new Person(String.valueOf(
-                            document.getData().get("Name")), 
-                            document.getData().get("Major").toString(),
-                            Integer.parseInt(document.getData().get("Age").toString()));
+                    person  = new Person(
+                                String.valueOf(document.getData().get("Name")), 
+                                document.getData().get("Major").toString(),
+                                Integer.parseInt(document.getData().get("Age").toString())
+                            );
                     
                     listOfUsers.add(person);
                 }
